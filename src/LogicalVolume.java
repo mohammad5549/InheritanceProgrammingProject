@@ -1,24 +1,16 @@
 import java.util.UUID;
 
-public class LogicalVolume extends Super{
-    private int GB;
-    private VolumeGroup VG;
+public class LogicalVolume extends LVMSYSTEM{
 
-    public LogicalVolume(String name, VolumeGroup VG, int GB)
-    {
-        super(name, UUID.randomUUID());
-        this.VG = VG;
-        this.GB = GB;
+    private int size;
+    public LogicalVolume(String name,int size){
+        super(name);
+        this.size = size;
+
     }
 
-    public int getSize()
-    {
-        return GB;
+    public int getSize(){
+        return size;
     }
 
-    public VolumeGroup getVolumeGroup()
-    {
-        return VG;
-    }
 }
-

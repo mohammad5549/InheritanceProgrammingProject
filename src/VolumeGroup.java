@@ -1,73 +1,48 @@
 import java.util.UUID;
 import java.util.ArrayList;
 
-public class VolumeGroup extends Super{
-    private ArrayList<PhysicalVolume> PVs;
-    private ArrayList<LogicalVolume> LVs;
-    int PVspace;
-    int LVspace;
-    int space;
+public class VolumeGroup extends LVMSYSTEM{
 
-    public VolumeGroup(String name)
-    {
-        super(name, UUID.randomUUID());
-        PVspace = 0;
-        LVspace = 0;
-        space = 0;
+    private ArrayList<PhysicalVolume> PV = new ArrayList<PhysicalVolume>();
+    private ArrayList<LogicalVolume> LV = new ArrayList<LogicalVolume>();
+
+    private int totalSize;
+    private int availiableSize;
+
+
+    public VolumeGroup(String name, PhysicalVolume Pv) {
+        super(name);
+        PV.add(Pv);
+        totalSize = Pv.getHardDrive().getSize();
+        availiableSize = Pv.getHardDrive().getSize();
+
     }
 
-    public ArrayList<PhysicalVolume> getPVs()
-    {
-        return PVs;
+    public int getTotalSize(){
+        return totalSize;
     }
 
-    public ArrayList<LogicalVolume> gteLVs()
-    {
-        return LVs;
+    public int getAvailiableSize(){
+        return availiableSize;
     }
 
-    //returns true if PV was successfully added, false otherwise
-    public boolean addPhysicalVolume(PhysicalVolume PV)
-    {
-        String PVname = PV.getName();
-        String PHDname = PV.getHardDrive().getName();
-        for (int i = 0; i < PVs.size(); i++)
-        {
-            String PVname2 = PVs.get(i).getName();
-            String PHDname2 = PVs.get(i).getHardDrive().getName();
-            if (PVname.equals(PVname2) || PHDname.equals(PHDname2))
-            {
-                return false;
-            }
-        }
-        PVs.add(PV);
-        PVspace += PV.getHardDrive().getSize();
-        return true;
+    public void addPV(PhysicalVolume PhysicalVol){
+        PV.add(PhysicalVol);
+        totalSize += PhysicalVol.getHardDrive().getSize();
+        availiableSize += PhysicalVol.getHardDrive().getSize();
     }
 
-    //returns true if LV was successfully added, false otherwise
-    public boolean addLogicalVolume(LogicalVolume LV)
-    {
-        String LVname = LV.getName();
-        for (int i = 0; i < LVs.size(); i++)
-        {
-            String LVname2 = LVs.get(i).getName();
-            if (LVname.equals(LVname2))
-            {
-                return false;
-            }
-        }
-        if (LVspace + LV.getSize() > PVspace)
-        {
-            return false;
-        }
-        LVs.add(LV);
-        LVspace += LV.getSize();
-        return true;
+    public void addLv(LogicalVolume LogicalVol){
+        LV.add(LogicalVol);
+        availiableSize = availiableSize - LogicalVol.getSize();
     }
 
+    public ArrayList<PhysicalVolume> getPV() {
+        return PV;
+    }
 
-
-
+    public ArrayList<LogicalVolume> getLV() {
+        return LV;
+    }
 
 }

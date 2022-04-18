@@ -1,7 +1,0 @@
-physical hard drive:
-- name
-- size (int GB)
-
-physical volume:
-- only one physical hard drive
-

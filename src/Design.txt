@@ -1,0 +1,100 @@
+Level 1 : Physical Hard Drive - name, size (GB)
+
+Level 2 : Physical Volume - Factors: (1 physical hard drive, user provided name, UUID).
+                            Condition :(Only created with hard drive).
+                            Extra Information: Can be added to Volume Groups (Level 3). A 1 to 1 ratio with physical
+                            hard drive, a physical hard drive can only belong to 1 physical vol.
+
+Level 3: Volume Groups - Factors: (User provided name, UUID)
+                         Consists : (Consists of a list of Physical Volumes(Level 2), and a list of
+                         Logical Volumes(Level 4)
+                         Return Values : the size of the Volume Group after adding up all Physical Volumes
+                                       : the size left of the Volume group after subtracting each Logical Volume
+
+Level 4: Logical Volumes: Factors: (User provided name, UUID, an associated volume group)
+                          Condition: CANNOT exist without an associated volume group
+                                     Should not be able to create a Logical Volume without enough space.
+
+Classes:
+PhysicalDrive
+    Variables : String Name, int Size, PhysicalVolume PV (associated with Physical Volumes)
+    Constructor: public PhysicalDrive(String name, int Size)
+    Methods: Get Methods for each variable
+             1 Set method for the PhysicalVolume to set the associated PhysicalVolume
+
+Superclass LVMSYSTEM
+       This is the Superclass or the Parent Class for PhysicalVolume, VolumeGroup, and LogicalVolume as these three
+       classes all require a name as well as a UUID
+       Variables : String Name, UUID UUID
+       Super Constructor : (String Name)
+            -Within this constructor, when called a random UUID would be generated
+       Methods: Get Methods for both variables so that the sub/child classes could access their appropriate name and UUID
+       information
+
+PhysicalVolume
+    Variables : PhysicalDrive physicalDrive, VolumeGroup volumeGroup. A Physical Volume has a Physical Drive and is within
+                a VolumeGroup
+    Constructor : (String Name, PhysicalDrive physicalDrive)
+    Methods: Get methods for both variables
+             1 Set method for Volume Group to set the associated Volume Group
+
+VolumeGroup
+    Variables : ArrayList PhysicalVolume PV - Stores all the Physical Volumes it contains
+                ArrayList LogicalVolume LV - Stores all the Logical Volumes it contains
+                int totalSize (The size that the Volume Group has from the Physical Volumes)
+                int availableSize   (The size that is available after Logical Volumes are created)
+
+    Constructor : (String Name, PhysicalVolume PV)
+                - Adds the PhysicalVolume to the PV ArrayList
+                - Sets the total and available size to the Physical Drive associated with the Physical Volume
+
+    Methods : Get Methods for all variables including the ArrayLists
+              2 methods, 1 for adding Physical Volumes which increases the total size as well as increases the available
+              size, and another for adding Logical Volumes which decreases the available size
+
+LogicalVolume
+    Variables : int size
+    Constructor : (String name,int size)
+    Methods : 1 method to return the value of size:
+
+Logic
+    This class contains all the logic behind the LVM simulation
+    Variables -ArrayList PhysicalDrive PHDlist - contains all the Physical Drives created
+               ArrayList PhysicalVolume PVlist - contains all the Physical Volumes created
+               ArrayList LogicalVolume LVlist - contains all the Logical Volumes created
+               ArrayList VolumeGroup VGlist - contains all the Volume Groups created
+
+    Methods : Runner - takes String input as a parameter and checks the command that the user has entered and will
+                       run the method according to the command
+
+              installDrives - takes the user input, checks the required conditions and enters the information accordingly,
+                              creating Physical Drives and adding them to the PHDList
+
+              listDrives - lists all the Physical Drives created in PHDlist
+
+              pvcreate - takes the user input, checks the required conditions, creates Physical Volumes and adds them to
+                         the PVlist
+
+              pvlist - list out all the Physical Volumes along with their information in PVList
+
+              lvcreate - takes the user input, checks the required conditions, creates Logical Volumes and adds them to
+                         the LVlist
+
+              lvlist - lists out all the Logical Volumes in LVlist along with their information
+
+              vgcreate - takes the user input, checks the required conditions, and creates a Volume Group and adds it to the
+                        VGlist
+
+              vgextend - takes the user input, checks the required conditions, and allows the user to add a physical volume
+                         onto an already existing Volume Group. Adds the Physical Volume to the Volume Groups ArrayList
+                         of Physical Volumes
+
+              vglist - lists out all the Volume Groups in VGlist along with their information.
+
+Main
+    The main class is the runner class
+    Contains no variables or methods
+    Creates an empty logic object in order to access all the methods within the logic class
+    Creates a scanner object to allow user input for commands
+    Creates a loop that would run until the word exit is inputted by the user that allows all the commands to be accessed
+    by the user

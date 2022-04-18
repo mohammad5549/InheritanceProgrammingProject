@@ -1,18 +1,27 @@
 import java.util.UUID;
+public class PhysicalVolume extends LVMSYSTEM{
 
-public class PhysicalVolume extends Super{
-    private PhysicalHardDrive hardDrive;
+    private PhysicalDrive physicalDrive;
+    private VolumeGroup volumeGroup;
 
-    public PhysicalVolume(String name, PhysicalHardDrive hardDrive)
-    {
-        super(name, UUID.randomUUID());
-        this.hardDrive = hardDrive;
+    public PhysicalVolume(String name, PhysicalDrive physicalDrive){
+        super(name);
+        this.physicalDrive = physicalDrive;
     }
 
-    public PhysicalHardDrive getHardDrive()
-    {
-        return hardDrive;
+    public PhysicalDrive getHardDrive(){
+        return physicalDrive;
     }
+
+    public VolumeGroup getVolumeGroup(){
+        return volumeGroup;
+    }
+
+    public void setVolumeGroup(VolumeGroup volumeGroup){
+        this.volumeGroup = volumeGroup;
+    }
+
+
 
 
 
